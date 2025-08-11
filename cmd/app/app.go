@@ -12,7 +12,6 @@ var AppCmd = &cobra.Command{
 
 func init() {
 	AppCmd.AddCommand(
-	//bootstrapCmd,
-	//testCmd,
+		bootstrapCmd,
 	)
 }
