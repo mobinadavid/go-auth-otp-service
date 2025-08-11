@@ -9,13 +9,8 @@ create table if not exists users
     password                     text,
     national_identity_code       varchar(255) default NULL::character varying,
     mobile                       varchar(100) not null,
-    phone                        varchar(100) default NULL::character varying,
     email                        varchar(100) default NULL::character varying,
-    postal_code                  varchar(100) default NULL::character varying,
-    address                      varchar(255) default NULL::character varying,
-    degree                       varchar(100) default NULL::character varying,
     profile_image                varchar(100) default NULL::character varying,
-    is_profile_completed         boolean      default false,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at timestamp with time zone DEFAULT NULL
