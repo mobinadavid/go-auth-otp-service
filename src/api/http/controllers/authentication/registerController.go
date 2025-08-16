@@ -6,6 +6,7 @@ import (
 	response "go-auth-otp-service/src/api/http/responses"
 	"go-auth-otp-service/src/pkg/validator"
 	"go-auth-otp-service/src/services/authentication"
+	"golang.org/x/net/context"
 
 	"net/http"
 )
@@ -55,8 +56,11 @@ func (controller *RegisterController) VerifyRegister(c *gin.Context) {
 		response.Api(c).SetErrors(err).SetLog().Send()
 		return
 	}
+	// prepare data for service
+	ctx := context.WithValue(context.Background(), "request-ip", c.GetString("request-ip"))
+	ctx = context.WithValue(ctx, "request-user-agent", c.GetHeader("User-Agent"))
 	// register user
-	err := controller.RegisterService.VerifyRegisterOTPViaRedisKey(&req)
+	jwt, err := controller.RegisterService.VerifyRegisterOTPViaRedisKey(ctx, &req)
 	if err != nil {
 		resp := response.Api(c).SetMessage(err.Error())
 		resp.SetLog().Send()
@@ -65,6 +69,9 @@ func (controller *RegisterController) VerifyRegister(c *gin.Context) {
 	// Return response.
 	response.Api(c).SetMessage("verify-register-request-successful").
 		SetStatusCode(http.StatusOK).
+		SetData(map[string]interface{}{
+			"jwt": jwt,
+		}).
 		SetLog().
 		Send()
 }

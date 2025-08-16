@@ -20,12 +20,13 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 		// Repositories
 		database.GetInstance,
 		ProvideUserRepository,
-
+		ProvideAccessTokenRepository,
 		// Services
 		ProvideRegisterService,
 		ProvideUserService,
 		ProvideOTPService,
-
+		ProvideJwtService,
+		ProvideAccessTokenService,
 		// Controllers
 		ProvideUserRegisterController,
 

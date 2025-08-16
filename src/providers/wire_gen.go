@@ -18,7 +18,10 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 	userRepository := ProvideUserRepository(databaseDatabase)
 	userService := ProvideUserService(userRepository)
 	otpService := ProvideOTPService()
-	registerService := ProvideRegisterService(userService, otpService)
+	jwtService := ProvideJwtService()
+	accessTokenRepository := ProvideAccessTokenRepository(databaseDatabase)
+	accessTokenService := ProvideAccessTokenService(accessTokenRepository, jwtService, userRepository)
+	registerService := ProvideRegisterService(userService, otpService, jwtService, accessTokenService)
 	registerController := ProvideUserRegisterController(registerService)
 	authenticationContainer := &AuthenticationContainer{
 		UserRegisterController: registerController,

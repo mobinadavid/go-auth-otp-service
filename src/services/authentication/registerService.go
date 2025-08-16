@@ -17,23 +17,18 @@ import (
 )
 
 type RegisterService struct {
-	UserService services.IUserService
-	OTPService  services.IOTPService
+	UserService        services.IUserService
+	OTPService         services.IOTPService
+	AccessTokenService IAccessTokenService
+	JwtService         IJwtService
 }
 
 type IRegisterService interface {
 	SaveStateAndSendOTP(req *authentication.RegisterRequest) (string, error)
-	VerifyRegisterOTPViaRedisKey(req *authentication.VerifyRegisterOTP) error
+	VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.VerifyRegisterOTP) (*JwtDTO, error)
 }
 
 func (service *RegisterService) SaveStateAndSendOTP(req *authentication.RegisterRequest) (string, error) {
-	user, err := service.UserService.GetByNationalIdentityCode(req.NationalIdentityCode)
-	if err != nil && err.Error() != gorm.ErrRecordNotFound.Error() {
-		return "", errs.RegisterFailed
-	}
-	if user != nil {
-		return "", errs.ErrUserAlreadyExists
-	}
 	// marshal the req to save in redis
 	reqData, err := json.Marshal(req)
 	if err != nil {
@@ -60,39 +55,57 @@ func (service *RegisterService) SaveStateAndSendOTP(req *authentication.Register
 	return key, nil
 }
 
-func (service *RegisterService) VerifyRegisterOTPViaRedisKey(req *authentication.VerifyRegisterOTP) error {
+func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.VerifyRegisterOTP) (*JwtDTO, error) {
 	res, err := cache.GetInstance().GetClient().Get(context.Background(), req.RegisterKey).Result()
 	if err != nil {
 		if err == redis.Nil {
-			return errs.RegisterFailed
+			return nil, errs.RegisterFailed
 		}
-		return errs.SomeThingWentWrong
+		return nil, errs.RegisterFailed
 	}
 
 	var resp authentication.RegisterRequest
 	err = json.Unmarshal([]byte(res), &resp)
 	if err != nil {
-		return errs.SomeThingWentWrong
+		return nil, errs.SomeThingWentWrong
 	}
 
 	var otpIsValid bool
 	otpIsValid, err = service.OTPService.VerifyOTP(resp.Mobile, req.OTP)
 	if err != nil {
-		return errs.SomeThingWentWrong
+		return nil, errs.SomeThingWentWrong
 	}
 
 	if !otpIsValid {
-		return errs.ErrOTPInvalid
+		return nil, errs.ErrOTPInvalid
 	}
-
-	_, err = service.UserService.Create(&userRequests.CreateRequest{
-		//Todo:add more fields
-		NationalIdentityCode: resp.NationalIdentityCode,
-		Mobile:               resp.Mobile,
-	})
+	user, err := service.UserService.GetByNationalIdentityCode(resp.NationalIdentityCode)
+	if err != nil && err.Error() != gorm.ErrRecordNotFound.Error() {
+		return nil, errs.SomeThingWentWrong
+	}
+	if user == nil {
+		user, err = service.UserService.Create(&userRequests.CreateRequest{
+			//Todo:add more fields
+			NationalIdentityCode: resp.NationalIdentityCode,
+			Mobile:               resp.Mobile,
+		})
+		if err != nil {
+			return nil, errs.SomeThingWentWrong
+		}
+	}
+	//generate token
+	jwtDTO, err := service.JwtService.Generate()
 	if err != nil {
-		return errs.SomeThingWentWrong
+		return nil, errs.ErrAuthenticationFailed
 	}
 
-	return nil
+	// Store tokens in database
+	ip := ctx.Value("request-ip").(string)
+	userAgent := ctx.Value("request-user-agent").(string)
+
+	_, err = service.AccessTokenService.Create(user, jwtDTO, ip, userAgent)
+	if err != nil {
+		return nil, errs.SomeThingWentWrong
+	}
+	return jwtDTO, nil
 }

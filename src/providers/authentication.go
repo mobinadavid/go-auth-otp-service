@@ -12,10 +12,12 @@ func ProvideUserRegisterController(registerService *authentication.RegisterServi
 	}
 }
 
-func ProvideRegisterService(userService *services.UserService, otpService *services.OTPService) *authentication.RegisterService {
+func ProvideRegisterService(userService *services.UserService, otpService *services.OTPService, jwtService *authentication.JwtService, accessTokenService *authentication.AccessTokenService) *authentication.RegisterService {
 	return &authentication.RegisterService{
-		UserService: userService,
-		OTPService:  otpService,
+		UserService:        userService,
+		OTPService:         otpService,
+		AccessTokenService: accessTokenService,
+		JwtService:         jwtService,
 	}
 }
 
