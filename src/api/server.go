@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"go-auth-otp-service/src/api/routes/users"
 	"go-auth-otp-service/src/config"
 	"golang.org/x/sync/errgroup"
 	"log"
@@ -58,9 +59,9 @@ func getNewRouter() *gin.Engine {
 func initUserServer() error {
 	router := getNewRouter()
 
-	//v1 := router.Group("api/v1")
+	v1 := router.Group("api/v1")
 	{
-		//users.AuthenticationRouter(v1)
+		users.AuthenticationRouter(v1)
 	}
 
 	// Run App.

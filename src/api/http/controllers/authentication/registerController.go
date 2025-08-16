@@ -28,7 +28,7 @@ func (controller *RegisterController) Register(c *gin.Context) {
 		return
 	}
 
-	err := controller.RegisterService.SaveStateAndSendOTP(&req)
+	key, err := controller.RegisterService.SaveStateAndSendOTP(&req)
 	if err != nil {
 		response.Api(c).SetMessage(err.Error()).SetLog().Send()
 		return
@@ -36,5 +36,35 @@ func (controller *RegisterController) Register(c *gin.Context) {
 
 	// Return response.
 	response.Api(c).SetMessage("request-successful").
-		SetStatusCode(http.StatusOK).SetMessage("register-request-successful").SetLog().Send()
+		SetStatusCode(http.StatusOK).SetMessage("register-request-successful").SetData(
+		map[string]interface{}{
+			"key": key,
+		}).Send()
+}
+
+func (controller *RegisterController) VerifyRegister(c *gin.Context) {
+	// Bind check payload.
+	var req authRequests.VerifyRegisterOTP
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Api(c).SetLog().Send()
+		return
+	}
+
+	// validate the payload.
+	if err := validator.Validate(&req, c.GetString("locale")); err != nil {
+		response.Api(c).SetErrors(err).SetLog().Send()
+		return
+	}
+	// register user
+	err := controller.RegisterService.VerifyRegisterOTPViaRedisKey(&req)
+	if err != nil {
+		resp := response.Api(c).SetMessage(err.Error())
+		resp.SetLog().Send()
+		return
+	}
+	// Return response.
+	response.Api(c).SetMessage("verify-register-request-successful").
+		SetStatusCode(http.StatusOK).
+		SetLog().
+		Send()
 }

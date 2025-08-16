@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/google/uuid"
 	"go-auth-otp-service/src/api/errs"
+	"go-auth-otp-service/src/api/http/requests/userRequests"
 	"go-auth-otp-service/src/models"
 	"go-auth-otp-service/src/repositories"
 )
@@ -11,6 +12,7 @@ type IUserService interface {
 	GetByNationalIdentityCode(nationalIdentityCode string) (*models.UserModel, error)
 	Update(user *models.UserModel) (*models.UserModel, error)
 	GetByUuid(uuid *uuid.UUID) (*models.UserModel, error)
+	Create(request *userRequests.CreateRequest) (*models.UserModel, error)
 }
 
 type UserService struct {
@@ -40,4 +42,21 @@ func (service *UserService) Update(user *models.UserModel) (*models.UserModel, e
 	}
 
 	return res, nil
+}
+
+func (service *UserService) Create(request *userRequests.CreateRequest) (*models.UserModel, error) {
+	user := &models.UserModel{
+		Uuid:                 uuid.New(),
+		FirstName:            request.FirstName,
+		LastName:             request.LastName,
+		NationalIdentityCode: request.NationalIdentityCode,
+		Mobile:               request.Mobile,
+		Password:             []byte(request.Password),
+	}
+	userOrm, err := service.UserRepository.Create(user)
+	if err != nil {
+		return nil, errs.SomeThingWentWrong
+	}
+
+	return userOrm, nil
 }

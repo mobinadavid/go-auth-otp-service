@@ -23,12 +23,12 @@ var (
 	ChangePasswordFailed      = errors.New("change-password-failed")
 	PasswordNotMatch          = errors.New("invalid-password-match")
 	PasswordShouldBeNew       = errors.New("new-password-is-equal-to-current-password")
-	ErrDeactivatedAdmin       = errors.New("admin-is-not-active")
 	ErrDeactivatedUser        = errors.New("user-is-not-active")
 	ErrRegisterTimeOut        = errors.New("register-time-out")
 	ErrRecoverPasswordTimeOut = errors.New("recover-password-time-out")
 	ErrChangePasswordTimeOut  = errors.New("change-password-time-out")
 	ErrLoginTimeOut           = errors.New("login-time-out")
+	ErrUserAlreadyExists      = errors.New("user-already-exists")
 	ErrAdminHasTwoFactorAuth  = errors.New("user-has-two-factor-auth")
 	ErrSameUserActivation     = errors.New("user-has-the-same-activation")
 	Invalid2FaCode            = errors.New("invalid-two-factor-code")
@@ -52,77 +52,4 @@ var (
 	ErrOTPInvalid    = errors.New("auth-otp-invalid")
 	ErrAuthOTPExists = errors.New("auth-otp-exists")
 	FailedToSendOTP  = errors.New("failed-to-send-top")
-)
-
-// captcha
-var (
-	CaptchaServiceIsTemporaryDown = errors.New("captcha-service-is-temporary-down")
-	CaptchaIsNotValid             = errors.New("captcha-is-not-valid")
-)
-
-// rate limiter
-var (
-	TooManyRequest = errors.New("too-many-request")
-)
-
-// sejam
-var (
-	SejamServiceIsTemporaryDown = errors.New("sejam-service-is-temporary-down")
-	InvalidOtpSejam             = errors.New("sejam-otp-invalid")
-	TooManyRequestForSejam      = errors.New("too-many-request-for-sejam")
-	UserNotFoundInSejam         = errors.New("user-not-found-in-sejam")
-)
-
-// farabourse
-var (
-	ProjectNotExists = errors.New("project-not-exists")
-	FaraBourseIsDown = errors.New("fara-bourse-is-down")
-)
-
-// Shareholder or Company Document
-var (
-	ShareholderPercentageExceeded = errors.New("shareholder-percentage-exceeded")
-	CompanyDocumentDuplicateEntry = errors.New("company-document-duplicate-entry")
-)
-
-// file
-var (
-	InvalidFormData           = errors.New("invalid-form-data")
-	CannotOpenFile            = errors.New("cannot-open-file")
-	CDNServiceIsTemporaryDown = errors.New("cdn-service-is-temporary-down")
-)
-
-// project
-var (
-	ErrProjectNotEditable              = errors.New("project-not-editable")
-	ErrPhaseDateGreaterThanLastPhase   = errors.New("phase-date-greater-than-last-phase")
-	ErrPhaseDateIsNotBetweenLastPhases = errors.New("phase-date-is-not-between-last-phases")
-	ErrIncompleteInformation           = errors.New("incomplete-information")
-	ErrIncorrectInputInformation       = errors.New("incorrect-input-information")
-	ErrDuplicateField                  = errors.New("duplicate-field")
-	ErrNotFoundProject                 = errors.New("project-not-found")
-	ErrStatusChange                    = errors.New("status-change")
-)
-
-// investment
-var (
-	ErrProfileNotCompleted       = errors.New("profile-is-not-completed")
-	ErrContributionOutOfRange    = errors.New("contribution-out-range")
-	ErrTotalContributionExceeded = errors.New("total-contribution-exceeded")
-)
-
-// ipg
-var (
-	IPGIsTemporaryDown = errors.New("ipg-is-temporary-down")
-)
-
-// wallet
-var (
-	MinimumAmountThreshold          = errors.New("amount-is-less-than-threshold")
-	MaximumAmountThreshold          = errors.New("amount-is-great-than-threshold")
-	ShebaIsNotActive                = errors.New("sheba-is-not-active")
-	ShebaIsNotValid                 = errors.New("sheba-is-not-valid")
-	NotEnoughMoneyForWallet         = errors.New("not-enough-money-for-wallet")
-	WalletNotActive                 = errors.New("wallet-not-active")
-	NotEnoughMoneyToStartInvestment = errors.New("not-enough-money-to-start-investment")
 )
