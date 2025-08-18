@@ -24,11 +24,11 @@ type RegisterService struct {
 }
 
 type IRegisterService interface {
-	SaveStateAndSendOTP(req *authentication.RegisterRequest) (string, error)
-	VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.VerifyRegisterOTP) (*JwtDTO, error)
+	SaveStateAndSendOTP(req *authentication.AuthSendOtpRequest) (string, error)
+	VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.AuthVerifyOTP) (*JwtDTO, error)
 }
 
-func (service *RegisterService) SaveStateAndSendOTP(req *authentication.RegisterRequest) (string, error) {
+func (service *RegisterService) SaveStateAndSendOTP(req *authentication.AuthSendOtpRequest) (string, error) {
 	// marshal the req to save in redis
 	reqData, err := json.Marshal(req)
 	if err != nil {
@@ -55,7 +55,7 @@ func (service *RegisterService) SaveStateAndSendOTP(req *authentication.Register
 	return key, nil
 }
 
-func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.VerifyRegisterOTP) (*JwtDTO, error) {
+func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.AuthVerifyOTP) (*JwtDTO, error) {
 	res, err := cache.GetInstance().GetClient().Get(context.Background(), req.Key).Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -64,7 +64,7 @@ func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context
 		return nil, errs.SomeThingWentWrong
 	}
 
-	var resp authentication.RegisterRequest
+	var resp authentication.AuthSendOtpRequest
 	err = json.Unmarshal([]byte(res), &resp)
 	if err != nil {
 		return nil, errs.SomeThingWentWrong

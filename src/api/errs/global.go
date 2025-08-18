@@ -19,7 +19,6 @@ var (
 var (
 	ErrAuthenticationFailed = errors.New("auth-failed")
 	RegisterFailed          = errors.New("register-failed")
-	ErrKeyNotFound          = errors.New("key-not-found")
 	RecoverPasswordFailed   = errors.New("recover-password-failed")
 	ChangePasswordFailed    = errors.New("change-password-failed")
 	PasswordNotMatch        = errors.New("invalid-password-match")
@@ -42,4 +41,9 @@ var (
 	ErrOTPInvalid    = errors.New("auth-otp-invalid")
 	ErrAuthOTPExists = errors.New("auth-otp-exists")
 	FailedToSendOTP  = errors.New("failed-to-send-top")
+)
+
+// rate limiter
+var (
+	TooManyRequest = errors.New("too-many-request")
 )

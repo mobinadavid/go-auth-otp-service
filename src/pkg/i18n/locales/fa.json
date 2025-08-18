@@ -35,5 +35,5 @@
   "invalid-is-strong-password": "رمز عبور وارد شده معتبر نیست",
   "invalid-is-rfc3339": "فرمت زمان ارسال شده باید RFC3339 باشد",
   "invalid-password-match": "رمز عبور با تکرار آن یکسان نیست",
-  "too-many-request": "لطفا بعد از گذشت 10 دقیقه مجددا تلاش کنید"
+  "too-many-request": "درخواست های ارسالی بیش از حد مجاز است"
 }

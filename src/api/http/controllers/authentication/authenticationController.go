@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	authRequests "go-auth-otp-service/src/api/http/requests/authentication"
 	response "go-auth-otp-service/src/api/http/responses"
 	"go-auth-otp-service/src/pkg/validator"
@@ -17,8 +18,8 @@ type RegisterController struct {
 
 func (controller *RegisterController) SendOtp(c *gin.Context) {
 	// Bind check payload.
-	var req authRequests.RegisterRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var req authRequests.AuthSendOtpRequest
+	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
 		response.Api(c).SetLog().Send()
 		return
 	}
@@ -45,7 +46,7 @@ func (controller *RegisterController) SendOtp(c *gin.Context) {
 
 func (controller *RegisterController) VerifyOtp(c *gin.Context) {
 	// Bind check payload.
-	var req authRequests.VerifyRegisterOTP
+	var req authRequests.AuthVerifyOTP
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.Api(c).SetLog().Send()
 		return
@@ -67,7 +68,7 @@ func (controller *RegisterController) VerifyOtp(c *gin.Context) {
 		return
 	}
 	// Return response.
-	response.Api(c).SetMessage("verify-register-request-successful").
+	response.Api(c).SetMessage("request-successful").
 		SetStatusCode(http.StatusOK).
 		SetData(map[string]interface{}{
 			"access_tokens": jwt,
