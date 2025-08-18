@@ -15,7 +15,7 @@ type RegisterController struct {
 	RegisterService authentication.IRegisterService
 }
 
-func (controller *RegisterController) Register(c *gin.Context) {
+func (controller *RegisterController) SendOtp(c *gin.Context) {
 	// Bind check payload.
 	var req authRequests.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -43,7 +43,7 @@ func (controller *RegisterController) Register(c *gin.Context) {
 		}).Send()
 }
 
-func (controller *RegisterController) VerifyRegister(c *gin.Context) {
+func (controller *RegisterController) VerifyOtp(c *gin.Context) {
 	// Bind check payload.
 	var req authRequests.VerifyRegisterOTP
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -70,7 +70,7 @@ func (controller *RegisterController) VerifyRegister(c *gin.Context) {
 	response.Api(c).SetMessage("verify-register-request-successful").
 		SetStatusCode(http.StatusOK).
 		SetData(map[string]interface{}{
-			"jwt": jwt,
+			"access_tokens": jwt,
 		}).
 		SetLog().
 		Send()

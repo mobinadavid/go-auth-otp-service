@@ -5,6 +5,7 @@ import (
 	"go-auth-otp-service/src/api"
 	"go-auth-otp-service/src/cache"
 	"go-auth-otp-service/src/database"
+	"go-auth-otp-service/src/pkg/i18n"
 	"go.uber.org/zap"
 	"log"
 	"os"
@@ -19,6 +20,13 @@ func Init() (err error) {
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+
+	// Initialize i18n
+	err = i18n.Init()
+	if err != nil {
+		log.Fatal("Failed to Initialize", zap.String("Service", "I18n"), zap.Error(err), zap.Time("timestamp", time.Now()))
+	}
+	log.Println("Initialized Successfully.", zap.String("Service", "I18n"), zap.Time("timestamp", time.Now()))
 
 	// Initialize Database
 	err = database.Init()

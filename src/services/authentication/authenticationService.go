@@ -32,7 +32,7 @@ func (service *RegisterService) SaveStateAndSendOTP(req *authentication.Register
 	// marshal the req to save in redis
 	reqData, err := json.Marshal(req)
 	if err != nil {
-		return "", errs.RegisterFailed
+		return "", errs.SomeThingWentWrong
 	}
 
 	// get expire time
@@ -45,7 +45,7 @@ func (service *RegisterService) SaveStateAndSendOTP(req *authentication.Register
 	key := uuid.New().String()
 	err = cache.GetInstance().GetClient().Set(context.Background(), key, reqData, time.Duration(expiration)*time.Second).Err()
 	if err != nil {
-		return "", errs.RegisterFailed
+		return "", errs.SomeThingWentWrong
 	}
 	err = service.OTPService.RequestOTP(req.Mobile)
 	if err != nil {
@@ -56,12 +56,12 @@ func (service *RegisterService) SaveStateAndSendOTP(req *authentication.Register
 }
 
 func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context, req *authentication.VerifyRegisterOTP) (*JwtDTO, error) {
-	res, err := cache.GetInstance().GetClient().Get(context.Background(), req.RegisterKey).Result()
+	res, err := cache.GetInstance().GetClient().Get(context.Background(), req.Key).Result()
 	if err != nil {
 		if err == redis.Nil {
-			return nil, errs.RegisterFailed
+			return nil, errs.SomeThingWentWrong
 		}
-		return nil, errs.RegisterFailed
+		return nil, errs.SomeThingWentWrong
 	}
 
 	var resp authentication.RegisterRequest
@@ -83,6 +83,7 @@ func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context
 	if err != nil && err.Error() != gorm.ErrRecordNotFound.Error() {
 		return nil, errs.SomeThingWentWrong
 	}
+	//register user if not exists
 	if user == nil {
 		user, err = service.UserService.Create(&userRequests.CreateRequest{
 			//Todo:add more fields

@@ -17,24 +17,14 @@ var (
 
 // authenticate
 var (
-	ErrAuthenticationFailed   = errors.New("auth-failed")
-	RegisterFailed            = errors.New("register-failed")
-	RecoverPasswordFailed     = errors.New("recover-password-failed")
-	ChangePasswordFailed      = errors.New("change-password-failed")
-	PasswordNotMatch          = errors.New("invalid-password-match")
-	PasswordShouldBeNew       = errors.New("new-password-is-equal-to-current-password")
-	ErrDeactivatedUser        = errors.New("user-is-not-active")
-	ErrRegisterTimeOut        = errors.New("register-time-out")
-	ErrRecoverPasswordTimeOut = errors.New("recover-password-time-out")
-	ErrChangePasswordTimeOut  = errors.New("change-password-time-out")
-	ErrLoginTimeOut           = errors.New("login-time-out")
-	ErrUserAlreadyExists      = errors.New("user-already-exists")
-	ErrAdminHasTwoFactorAuth  = errors.New("user-has-two-factor-auth")
-	ErrSameUserActivation     = errors.New("user-has-the-same-activation")
-	Invalid2FaCode            = errors.New("invalid-two-factor-code")
-	NotActiveTwoFactor        = errors.New("two-factor-authentication-is-not-active")
-	InvalidRecoveryCode       = errors.New("invalid-recovery-code")
-	OTPIsNotValid             = errors.New("otp-is-not-valid")
+	ErrAuthenticationFailed = errors.New("auth-failed")
+	RegisterFailed          = errors.New("register-failed")
+	ErrKeyNotFound          = errors.New("key-not-found")
+	RecoverPasswordFailed   = errors.New("recover-password-failed")
+	ChangePasswordFailed    = errors.New("change-password-failed")
+	PasswordNotMatch        = errors.New("invalid-password-match")
+	InvalidRecoveryCode     = errors.New("invalid-recovery-code")
+	OTPIsNotValid           = errors.New("otp-is-not-valid")
 )
 
 // token

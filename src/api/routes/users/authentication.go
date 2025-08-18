@@ -14,8 +14,8 @@ func AuthenticationRouter(router *gin.RouterGroup) {
 	// register
 	register := authentication.Group("register")
 	{
-		register.POST("send-otp", registerController.UserRegisterController.Register)
-		register.POST("verify-otp", registerController.UserRegisterController.VerifyRegister)
+		register.POST("send-otp", registerController.UserRegisterController.SendOtp)
+		register.POST("verify-otp", registerController.UserRegisterController.VerifyOtp)
 	}
 
 }

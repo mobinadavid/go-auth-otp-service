@@ -7,6 +7,6 @@ type RegisterRequest struct {
 }
 
 type VerifyRegisterOTP struct {
-	RegisterKey string `json:"register_key" validate:"omitempty"`
-	OTP         string `json:"otp" validate:"required"`
+	Key string `json:"key" validate:"omitempty"`
+	OTP string `json:"otp" validate:"required"`
 }

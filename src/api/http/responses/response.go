@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-auth-otp-service/src/pkg/i18n"
 	"net/http"
 )
 
@@ -36,7 +37,7 @@ func Api(c *gin.Context) *Builder {
 			IsSuccessful: false,
 			Log:          false,
 			StatusCode:   http.StatusBadRequest,
-			Message:      "invalid-payload",
+			Message:      i18n.Localize(c.GetString("locale"), "invalid-payload"),
 		},
 	}
 }
@@ -55,7 +56,7 @@ func (builder *Builder) SetStatusCode(statusCode int) *Builder {
 
 // SetMessage sets the message of the response
 func (builder *Builder) SetMessage(message string) *Builder {
-	builder.response.Message = message
+	builder.response.Message = i18n.Localize(builder.c.GetString("locale"), message)
 	return builder
 }
 
