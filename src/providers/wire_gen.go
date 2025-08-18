@@ -8,6 +8,7 @@ package providers
 
 import (
 	"go-auth-otp-service/src/api/http/controllers/authentication"
+	"go-auth-otp-service/src/api/http/middlewares"
 	"go-auth-otp-service/src/database"
 )
 
@@ -23,8 +24,10 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 	accessTokenService := ProvideAccessTokenService(accessTokenRepository, jwtService, userRepository)
 	registerService := ProvideRegisterService(userService, otpService, jwtService, accessTokenService)
 	registerController := ProvideUserRegisterController(registerService)
+	authenticationMiddleware := ProvideAuthenticationMiddleware(accessTokenService)
 	authenticationContainer := &AuthenticationContainer{
-		UserRegisterController: registerController,
+		UserRegisterController:   registerController,
+		AuthenticationMiddleware: authenticationMiddleware,
 	}
 	return authenticationContainer
 }
@@ -33,6 +36,7 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 
 type (
 	AuthenticationContainer struct {
-		UserRegisterController *authentication.RegisterController
+		UserRegisterController   *authentication.RegisterController
+		AuthenticationMiddleware *middlewares.AuthenticationMiddleware
 	}
 )

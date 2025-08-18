@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"go-auth-otp-service/src/api/http/middlewares"
 	"go-auth-otp-service/src/api/routes/users"
 	"go-auth-otp-service/src/config"
 	"golang.org/x/sync/errgroup"
@@ -52,6 +53,9 @@ func getNewRouter() *gin.Engine {
 
 	// Attach recovery middleware.
 	router.Use(gin.Recovery())
+
+	// Attach i18n middleware.
+	router.Use(middlewares.I18n)
 
 	return router
 }

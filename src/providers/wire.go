@@ -6,12 +6,14 @@ package providers
 import (
 	"github.com/google/wire"
 	authentication2 "go-auth-otp-service/src/api/http/controllers/authentication"
+	"go-auth-otp-service/src/api/http/middlewares"
 	"go-auth-otp-service/src/database"
 )
 
 type (
 	AuthenticationContainer struct {
-		UserRegisterController *authentication2.RegisterController
+		UserRegisterController   *authentication2.RegisterController
+		AuthenticationMiddleware *middlewares.AuthenticationMiddleware
 	}
 )
 
@@ -29,6 +31,9 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 		ProvideAccessTokenService,
 		// Controllers
 		ProvideUserRegisterController,
+
+		// Middlewares
+		ProvideAuthenticationMiddleware,
 
 		wire.Struct(new(AuthenticationContainer), "*"),
 	)

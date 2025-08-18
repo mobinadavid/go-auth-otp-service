@@ -2,6 +2,7 @@ package providers
 
 import (
 	authentication_controller "go-auth-otp-service/src/api/http/controllers/authentication"
+	"go-auth-otp-service/src/api/http/middlewares"
 	"go-auth-otp-service/src/services"
 	"go-auth-otp-service/src/services/authentication"
 )
@@ -23,4 +24,10 @@ func ProvideRegisterService(userService *services.UserService, otpService *servi
 
 func ProvideJwtService() *authentication.JwtService {
 	return &authentication.JwtService{}
+}
+
+func ProvideAuthenticationMiddleware(accessTokenService *authentication.AccessTokenService) *middlewares.AuthenticationMiddleware {
+	return &middlewares.AuthenticationMiddleware{
+		AccessTokenService: accessTokenService,
+	}
 }
