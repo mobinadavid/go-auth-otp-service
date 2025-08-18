@@ -13,6 +13,7 @@ type IUserRepository interface {
 	GetList(builder *scopes.BuilderModel) (*scopes.PaginateModel, error)
 	GetByUuid(uuid *uuid.UUID) (*models.UserModel, error)
 	GetByNationalIdentityCode(nationalIdentityCode string) (*models.UserModel, error)
+	GetByMobile(mobile string) (*models.UserModel, error)
 	Create(user *models.UserModel) (*models.UserModel, error)
 	Update(user *models.UserModel) (*models.UserModel, error)
 	Delete(user *models.UserModel) error
@@ -59,6 +60,17 @@ func (repository *UserRepository) GetByUuid(uuid *uuid.UUID) (*models.UserModel,
 func (repository *UserRepository) GetByNationalIdentityCode(nationalIdentityCode string) (*models.UserModel, error) {
 	var user models.UserModel
 	result := repository.DatabaseHandler.GetClient().First(&user, "national_identity_code = ?", nationalIdentityCode)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &user, nil
+}
+
+// GetByMobile gets a user by mobile .
+func (repository *UserRepository) GetByMobile(mobile string) (*models.UserModel, error) {
+	var user models.UserModel
+	result := repository.DatabaseHandler.GetClient().First(&user, "mobile = ?", mobile)
 	if result.Error != nil {
 		return nil, result.Error
 	}

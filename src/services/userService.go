@@ -11,10 +11,11 @@ import (
 
 type IUserService interface {
 	GetList(builder *scopes.BuilderModel) (*scopes.PaginateModel, error)
-	GetByNationalIdentityCode(nationalIdentityCode string) (*models.UserModel, error)
 	Update(user *models.UserModel) (*models.UserModel, error)
 	GetByUuid(uuid *uuid.UUID) (*models.UserModel, error)
 	Create(request *userRequests.CreateRequest) (*models.UserModel, error)
+	GetByNationalIdentityCode(nationalIdentityCode string) (*models.UserModel, error)
+	GetByMobile(mobile string) (*models.UserModel, error)
 }
 
 type UserService struct {
@@ -46,6 +47,15 @@ func (service *UserService) GetByNationalIdentityCode(nationalIdentityCode strin
 	}
 	return res, nil
 }
+
+func (service *UserService) GetByMobile(mobile string) (*models.UserModel, error) {
+	res, err := service.UserRepository.GetByMobile(mobile)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (service *UserService) Update(user *models.UserModel) (*models.UserModel, error) {
 	res, err := service.UserRepository.Update(user)
 	if err != nil {

@@ -79,7 +79,7 @@ func (service *RegisterService) VerifyRegisterOTPViaRedisKey(ctx context.Context
 	if !otpIsValid {
 		return nil, errs.ErrOTPInvalid
 	}
-	user, err := service.UserService.GetByNationalIdentityCode(resp.NationalIdentityCode)
+	user, err := service.UserService.GetByMobile(resp.Mobile)
 	if err != nil && err.Error() != gorm.ErrRecordNotFound.Error() {
 		return nil, errs.SomeThingWentWrong
 	}

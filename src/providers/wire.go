@@ -15,6 +15,7 @@ type (
 	AuthenticationContainer struct {
 		UserRegisterController   *authentication2.RegisterController
 		AuthenticationMiddleware *middlewares.AuthenticationMiddleware
+		AccessTokenController    *authentication2.AccessTokenController
 	}
 	UserContainer struct {
 		UserController *controllers.UserController
@@ -35,7 +36,7 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 		ProvideAccessTokenService,
 		// Controllers
 		ProvideUserRegisterController,
-
+		ProvideUserAccessTokenController,
 		// Middlewares
 		ProvideAuthenticationMiddleware,
 

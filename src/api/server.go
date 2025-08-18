@@ -67,6 +67,7 @@ func initUserServer() error {
 	{
 		routes.AuthenticationRouter(v1)
 		routes.UserRouter(v1)
+		routes.RegisterAccessTokensRouter(v1)
 	}
 
 	// Run App.

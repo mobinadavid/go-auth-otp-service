@@ -26,9 +26,11 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 	registerService := ProvideRegisterService(userService, otpService, jwtService, accessTokenService)
 	registerController := ProvideUserRegisterController(registerService)
 	authenticationMiddleware := ProvideAuthenticationMiddleware(accessTokenService)
+	accessTokenController := ProvideUserAccessTokenController(accessTokenService)
 	authenticationContainer := &AuthenticationContainer{
 		UserRegisterController:   registerController,
 		AuthenticationMiddleware: authenticationMiddleware,
+		AccessTokenController:    accessTokenController,
 	}
 	return authenticationContainer
 }
@@ -50,6 +52,7 @@ type (
 	AuthenticationContainer struct {
 		UserRegisterController   *authentication.RegisterController
 		AuthenticationMiddleware *middlewares.AuthenticationMiddleware
+		AccessTokenController    *authentication.AccessTokenController
 	}
 	UserContainer struct {
 		UserController *controllers.UserController
