@@ -60,7 +60,6 @@
   "failed-to-send-top": "Sending OTP is not not valid",
   "invalid-credentials": "The credentials provided are invalid",
   "nav-not-calculated": "The nav is not calculated for end date",
-  "to-many-request-back-office": "To many request has been sent to back office. please try again later",
   "back_office_not_supported": "The back office is not supported",
   "user-nid-does-not-match-cart-number": "Input cart number is not for the user",
   "bank-not-exist":"Bank does not exist",
