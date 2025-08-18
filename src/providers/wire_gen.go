@@ -7,6 +7,7 @@
 package providers
 
 import (
+	"go-auth-otp-service/src/api/http/controllers"
 	"go-auth-otp-service/src/api/http/controllers/authentication"
 	"go-auth-otp-service/src/api/http/middlewares"
 	"go-auth-otp-service/src/database"
@@ -32,11 +33,25 @@ func GetAuthenticationContainer() *AuthenticationContainer {
 	return authenticationContainer
 }
 
+func GetUserContainer() *UserContainer {
+	databaseDatabase := database.GetInstance()
+	userRepository := ProvideUserRepository(databaseDatabase)
+	userService := ProvideUserService(userRepository)
+	userController := ProvideUserController(userService)
+	userContainer := &UserContainer{
+		UserController: userController,
+	}
+	return userContainer
+}
+
 // wire.go:
 
 type (
 	AuthenticationContainer struct {
 		UserRegisterController   *authentication.RegisterController
 		AuthenticationMiddleware *middlewares.AuthenticationMiddleware
+	}
+	UserContainer struct {
+		UserController *controllers.UserController
 	}
 )

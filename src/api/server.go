@@ -5,7 +5,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"go-auth-otp-service/src/api/http/middlewares"
-	"go-auth-otp-service/src/api/routes/users"
+	"go-auth-otp-service/src/api/routes"
 	"go-auth-otp-service/src/config"
 	"golang.org/x/sync/errgroup"
 	"log"
@@ -65,7 +65,8 @@ func initUserServer() error {
 
 	v1 := router.Group("api/v1")
 	{
-		users.AuthenticationRouter(v1)
+		routes.AuthenticationRouter(v1)
+		routes.UserRouter(v1)
 	}
 
 	// Run App.

@@ -88,7 +88,7 @@ func (repository *AccessTokenRepository) Create(accessToken *models.AccessTokenM
 		return nil, err
 	}
 
-	accessToken.AccessToken, err = hash.GetInstance().Generate(accessToken.RefreshToken)
+	accessToken.RefreshToken, err = hash.GetInstance().Generate(accessToken.RefreshToken)
 	if err != nil {
 		return nil, err
 	}

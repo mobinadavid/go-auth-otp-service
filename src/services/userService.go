@@ -4,11 +4,13 @@ import (
 	"github.com/google/uuid"
 	"go-auth-otp-service/src/api/errs"
 	"go-auth-otp-service/src/api/http/requests/userRequests"
+	"go-auth-otp-service/src/database/scopes"
 	"go-auth-otp-service/src/models"
 	"go-auth-otp-service/src/repositories"
 )
 
 type IUserService interface {
+	GetList(builder *scopes.BuilderModel) (*scopes.PaginateModel, error)
 	GetByNationalIdentityCode(nationalIdentityCode string) (*models.UserModel, error)
 	Update(user *models.UserModel) (*models.UserModel, error)
 	GetByUuid(uuid *uuid.UUID) (*models.UserModel, error)
@@ -17,6 +19,15 @@ type IUserService interface {
 
 type UserService struct {
 	UserRepository repositories.IUserRepository
+}
+
+func (service *UserService) GetList(builder *scopes.BuilderModel) (*scopes.PaginateModel, error) {
+	res, err := service.UserRepository.GetList(builder)
+	if err != nil {
+		return nil, errs.SomeThingWentWrong
+	}
+
+	return res, nil
 }
 
 func (service *UserService) GetByUuid(uuid *uuid.UUID) (*models.UserModel, error) {
