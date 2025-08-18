@@ -11,8 +11,8 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "fund-app",
-	Short: "Fund app backend API project.",
+	Use:   "app",
+	Short: "backend API project.",
 	Long:  ``,
 }
 
